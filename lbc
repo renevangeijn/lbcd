@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# MariaDB Load Balancer Check
+BINPATH=/usr/local/bin
+#
+CMD=$(echo ${1}|tr '[:upper:]' '[:lower:}')
+KILL=$(which kill)
+LBCEXE=${BINPATH}/lbcd
+LOGFILE=/var/log/mariadb/lbc.log
+PIDFILE=/tmp/lbcd.pid
+#EXEUSER=mysql
+
+function help
+{
+   echo "Load Balancer Check"
+   echo "-------------------"
+   echo "lbc <start|stop|reload|restart>"
+   echo "However, this process should be started usinf systemd"
+   echo "          systemctl start lbc.service"
+}
+
+function lbc_start
+{
+   # ${LBCEXE} -u ${EXEUSR} 1>&2 ${LOGFILE}
+   ${LBCEXE} 1>&2 ${LOGFILE}
+}
+
+function lbc_stop
+{
+  LBCPID=$(cat $PIDFILE)
+  ${KILL} ${LBCPID}
+}
+
+case $CMD in
+   start)
+      lbc_start
+      ;;
+   stop)
+      lbc_stop
+      ;;
+   reload | restart)
+      lbc_stop
+      lbc_start
+      ;;
+   *)
+      help
+esac

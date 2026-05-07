@@ -1,0 +1,8 @@
+# Install
+# -------
+#
+# Check the Makefile and ajust BINDIR if needed.
+# This is the place where the executables will be installed.
+
+make
+make install

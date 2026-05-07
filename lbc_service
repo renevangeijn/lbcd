@@ -1,0 +1,18 @@
+[Unit]
+Description=MariaDB Load Balancer Check
+After=network.target
+
+[Service]
+ExecStart=BINPATH/lbc start
+ExecReload=BINPATH/lbc reload
+ExecStop=BINPATH/lbc stop
+User=mysql
+Group=mysql
+Type=simple
+Restart=on-failure
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+RequiredBy=network.target
+
