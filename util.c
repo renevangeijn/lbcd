@@ -18,7 +18,7 @@ int print_help ()
    printf ( "\n\n" );
 }
 
-int s_datetime ( char *retstr )
+int isodatetime ( char *retstr )
 {
    time_t now = time ( NULL );  
    struct tm *t = localtime ( &now );
@@ -38,7 +38,7 @@ void signal_callback_handler ( int signum )
 {
    char s_now[19];
 
-   s_datetime ( s_now );
+   isodatetime ( s_now );
    fprintf ( stderr, "Server killed (%d) at %s\r\n", signum, s_now );
 
    /* Remove the pidfile */

@@ -100,7 +100,7 @@ int main ( int argc, char *argv[] )
       itoa ( LBCD_PORT, buf, 10 );  
 
    char s_now[19];
-   s_datetime ( s_now );
+   isodatetime ( s_now );
    fprintf ( stderr, "LBCD starting as user %s on port %d at %s.\r\n", db_user, db_port, s_now );
    // Can free now, process is running as db_user
    free ( db_user );
