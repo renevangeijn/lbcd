@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <string.h>
+#include <syslog.h>
 #include <mysql/mysql.h>
 #include "errmsg.h"
 
@@ -14,7 +15,8 @@ int check_mysql ( char *mysql_socket )
 
    if ( con == NULL )
    {
-      fprintf ( stderr, ERR_MYSQL01, mysql_error ( con ));
+//    fprintf ( stderr, ERR_MYSQL01, mysql_error ( con ));
+      syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), ERR_MYSQL01, mysql_error ( con ));
       return 1;
    }
 
@@ -27,7 +29,8 @@ int check_mysql ( char *mysql_socket )
                mysql_socket,         /* socket file or named pipe name */
                CLIENT_FOUND_ROWS     /* connection flags */ ))
    {
-      fprintf ( stderr, ERR_MYSQL02, mysql_error ( con ));
+//    fprintf ( stderr, ERR_MYSQL02, mysql_error ( con ));
+      syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), ERR_MYSQL02, mysql_error ( con ));
       mysql_close ( con );
       return 1;
    }
@@ -36,7 +39,8 @@ int check_mysql ( char *mysql_socket )
 
    if ( mysql_query ( con, query ))
    {
-      fprintf ( stderr, ERR_MYSQL02, mysql_error ( con ));
+//    fprintf ( stderr, ERR_MYSQL02, mysql_error ( con ));
+      syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), ERR_MYSQL02, mysql_error ( con ));
       mysql_close ( con );
       return 1;
    }
@@ -44,7 +48,8 @@ int check_mysql ( char *mysql_socket )
    MYSQL_RES *result = mysql_store_result ( con );
    if ( !result )
    {
-      fprintf ( stderr, ERR_MYSQL03, mysql_error ( con ));
+//    fprintf ( stderr, ERR_MYSQL03, mysql_error ( con ));
+      syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), ERR_MYSQL03, mysql_error ( con ));
       return 1;
    }
    MYSQL_ROW row;

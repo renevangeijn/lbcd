@@ -3,6 +3,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <syslog.h>
 #include <time.h>
 #include "util.h"
 #include "errmsg.h"
@@ -39,7 +40,8 @@ void signal_callback_handler ( int signum )
    char s_now[19];
 
    isodatetime ( s_now );
-   fprintf ( stderr, "Server killed (%d) at %s\r\n", signum, s_now );
+// fprintf ( stderr, "Server killed (%d) at %s\r\n", signum, s_now );
+   syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), "Server killed (%d) at %s\r\n", signum, s_now );
 
    /* Remove the pidfile */
    unlink ( PIDFILE );

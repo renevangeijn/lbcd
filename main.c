@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <netdb.h>
+#include <syslog.h>
 #include <sys/wait.h>
 #include "errmsg.h"
 #include "priv.h"
@@ -80,7 +81,8 @@ int main ( int argc, char *argv[] )
    // Check if we're root (required to switch users)
    if ( getuid() != 0 )
    {
-      fprintf ( stderr, ERR_PRIVROOT );
+//    fprintf ( stderr, ERR_PRIVROOT );
+      syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), ERR_PRIVROOT );
       exit ( EXIT_FAILURE );
    }
    // Drop privileges to target user
@@ -101,7 +103,8 @@ int main ( int argc, char *argv[] )
 
    char s_now[19];
    isodatetime ( s_now );
-   fprintf ( stderr, "LBCD starting as user %s on port %d at %s.\r\n", db_user, db_port, s_now );
+// fprintf ( stderr, "LBCD starting as user %s on port %d at %s.\r\n", db_user, db_port, s_now );
+   syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), "LBCD starting as user %s on port %d at %s.\r\n", db_user, db_port, s_now );
    // Can free now, process is running as db_user
    free ( db_user );
 
@@ -153,7 +156,8 @@ int main ( int argc, char *argv[] )
    long mainpid;
    mainpid = (long) getpid();
    fprintf ( mainpidf, "%ld", mainpid );
-   fprintf ( stderr, "Started with pid %ld\r\n", mainpid );
+// fprintf ( stderr, "Started with pid %ld\r\n", mainpid );
+   syslog ( LOG_MAKEPRI ( LOG_LOCAL1, LOG_ERR ), "Started with pid %ld\r\n", mainpid );
    fclose ( mainpidf );
 
    while (1) 
